@@ -12,12 +12,12 @@
         <app-search (keyword)="onSearch($event)"></app-search>
         <div class="list-group border-0">
           <button
+            (click)="onBankSelect(bank.uuid)"
             *ngFor="let bank of searchedBanks"
-            (click)="onBankSelect(bank.id)"
-            type="button"
             class="list-group-item list-group-item-action border-0"
+            type="button"
           >
-            {{ bank.name }}
+            {{ bank.bankName }}
           </button>
         </div>
       </div>
