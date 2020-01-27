@@ -41,7 +41,11 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.getX_XSRF_TOKEN().length > 0;
+    if (this.getX_XSRF_TOKEN()) {
+      return this.getX_XSRF_TOKEN().length > 0;
+    }
+
+    return false;
   }
 
   setCookie(token: string) {
