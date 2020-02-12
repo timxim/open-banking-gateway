@@ -74,6 +74,8 @@ public enum SandboxApp {
     CERT_GENERATOR("certificate-generator-1.8.jar"); // adorsys/xs2a-certificate-generator
 
 
+    public static final String SANDBOX_LOG_LEVEL = "SANDBOX_LOG_LEVEL";
+
     public static final String DB_TYPE = "DB_TYPE";
     public static final String TEST_CONTAINERS_POSTGRES = "test-containers-postgres";
 
@@ -284,7 +286,7 @@ public enum SandboxApp {
                             "--spring.config.location=" + buildSpringConfigLocation(ctx),
                             "--primary.profile=" + getPrimaryConfigFile(),
                             "--testcontainers.postgres.port=" + ctx.getDbPort().get(),
-                            "--logging.level.root=WARN"
+                            "--logging.level.root=" + getSandboxLogLevel()
                     }
             );
         } catch (IllegalAccessException | InvocationTargetException ex) {
@@ -397,6 +399,14 @@ public enum SandboxApp {
         });
     }
 
+    private static String getSandboxLogLevel() {
+        String level = System.getenv(SANDBOX_LOG_LEVEL);
+        if (null == level) {
+            return "WARN";
+        }
+
+        return level;
+    }
     @Data
     private static class ClassloaderWithJar {
 
