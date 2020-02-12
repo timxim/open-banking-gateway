@@ -214,6 +214,7 @@ public enum SandboxApp {
             declaredVars.fields().forEachRemaining(entry -> readYamlVariableToMap(entry, commonConfig, envVars));
             FixedHostPortGenericContainer container = new FixedHostPortGenericContainer(jarOrDockerFile);
 
+            int containerPort = Integer.parseInt(readVariableFromConfig(appConfig.at("/port"), commonConfig));
             // Hack for linux as it does not have `host.docker.internal` so directly placing into host network
             if (System.getProperty("os.name").toLowerCase().contains("linux")) {
                 container.withExtraHost(
@@ -221,15 +222,14 @@ public enum SandboxApp {
                     new InetSocketAddress(0).getAddress().getHostAddress()
                 );
                 container.withNetworkMode("host");
+            } else {
+                container.withFixedExposedPort(containerPort, containerPort);
             }
 
             container.withEnv(envVars).waitingFor(Wait.defaultWaitStrategy());
             container.start();
             ctx.getDockerContainer().put(this, container);
-            ctx.getDockerPorts().put(
-                    this,
-                    Integer.parseInt(readVariableFromConfig(appConfig.at("/port"), commonConfig))
-            );
+            ctx.getDockerPorts().put(this, containerPort);
         } catch (IOException | RuntimeException ex) {
             log.error("{} from {} Dockerfile has terminated exceptionally", name(), jarOrDockerFile, ex);
         }
