@@ -1,4 +1,8 @@
 @startuml
+legend top left
+  Combined embedded (Extra user parameters) and redirect(ASPSP authorization) authorization
+endlegend
+
 actor FinTech
 actor User
 collections TppBackend
