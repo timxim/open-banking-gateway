@@ -1,6 +1,9 @@
 @startuml
 legend top left
-  Combined embedded (Extra user parameters) and redirect (ASPSP authorization) authorization
+  <b>Combined</b>
+  embedded (Extra user parameters)
+  and redirect (ASPSP authorization)
+  authorization when  <b>consent is missing</b>
 endlegend
 
 actor FinTech
@@ -49,8 +52,8 @@ Xs2aListAccountsEntrypoint [#blue]-> Xs2aServices
 Xs2aServices [#blue]-> Database : Consent for service session
 Xs2aServices <-[#blue] Database : No consent
 Xs2aServices [#blue]-> Xs2aServices : Validate API input -\ndo we have enough data (Mocked execution)
-Xs2aServices [#blue]-> Xs2aListAccountsEntrypoint : User input has MissingParameters[]
-Xs2aListAccountsEntrypoint [#blue]-> OutcomeMapper : Translate 'User input has MissingParameters[]'
+Xs2aServices [#blue]-> Xs2aListAccountsEntrypoint : ValidationIssue[] -> User input has missing parameters
+Xs2aListAccountsEntrypoint [#blue]-> OutcomeMapper : Translate ValidationIssue[]
 OutcomeMapper [#blue]-> Xs2aListAccountsEntrypoint : ContextBasedValidationErrorResult
 Xs2aListAccountsEntrypoint [#blue]-> FacadeService : ContextBasedValidationErrorResult
 FacadeService [#blue]-> ProtocolResultHandler : Translate ContextBasedValidationErrorResult -> FacadeStartAuthorizationResult
@@ -67,6 +70,7 @@ FinTech [#blue]-> FinTech : Store <b>service session id</b>
 FinTech [#orange]-> User : Redirect user to\n'Embedded authorization'\nform using 'Location' header
 
 == User authorizes this request (embedded to provide i.e. PSU id) ==
+loop Until user input has not enough parameters
 User [#green]-> TppBackend : POST /consent/embedded\n(Consent valid until, which accounts, etc.)
 TppBackend [#green]-> ConsentServiceController : embeddedUsingPOST
 ConsentServiceController [#green]-> FacadeService : Facade.execute()
@@ -79,6 +83,7 @@ ProtocolSelector [#green]-> FacadeService : BankProtocol
 FacadeService [#green]-> Spring : Find bean - Bean(BankProtocol.protocolBeanName) extends Action
 FacadeService <-[#green] Spring : It is Xs2aUpdateAuthorization service bean
 Xs2aUpdateAuthorization [#green]-> Xs2aServices : Update context with users' input
+end
 Xs2aServices [#green]-> Xs2aServices : User input OK
 Xs2aServices [#green]-> Xs2aServices : Switch to real execution mode
 Xs2aServices [#green]-> ASPSP : Initiate consent
