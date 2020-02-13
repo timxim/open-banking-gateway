@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Consts} from '../consts';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-initial-request',
@@ -20,9 +21,9 @@ export class InitialRequestComponent implements OnInit {
   bankId = new FormControl();
   serviceSessionId = new FormControl();
 
-  constructor(private client: HttpClient) {
-    this.fintechRedirectUriOk.setValue('http://localhost:5500/fintech/ok');
-    this.fintechRedirectUriNok.setValue('http://localhost:5500/fintech/nok');
+  constructor(private activatedRoute: ActivatedRoute, private client: HttpClient) {
+    this.fintechRedirectUriOk.setValue('http://localhost:5500/fintech-callback/ok');
+    this.fintechRedirectUriNok.setValue('http://localhost:5500/fintech-callback/nok');
     this.fintechUserId.setValue('Anton_Brueckner');
     this.authorization.setValue('qwerty');
     this.requestId.setValue('43da4e2f-72cb-43bb-8afd-683104de57f9');
@@ -31,6 +32,12 @@ export class InitialRequestComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(
+      params => {
+        if (params['serviceSessionId']) {
+          this.serviceSessionId.setValue(params['serviceSessionId']);
+        }
+      });
   }
 
   submit() {

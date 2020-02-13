@@ -27,6 +27,7 @@ import { ThreeStateCheckboxComponent } from './three-state-checkbox/three-state-
 import { InitialRequestComponent } from './initial-request/initial-request.component';
 import { FromAspspComponent } from './from-aspsp/from-aspsp.component';
 import { EmbeddedStartComponent } from './embedded-start/embedded-start.component';
+import { FintechCallbackOkComponent } from './fintech-callback-ok/fintech-callback-ok.component';
 
 export const AppDateFormats = {
   parse: {
@@ -54,7 +55,8 @@ export const AppDateFormats = {
     ThreeStateCheckboxComponent,
     InitialRequestComponent,
     FromAspspComponent,
-    EmbeddedStartComponent
+    EmbeddedStartComponent,
+    FintechCallbackOkComponent
   ],
     imports: [
         BrowserModule,
