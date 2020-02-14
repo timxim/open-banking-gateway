@@ -3,13 +3,13 @@ package de.adorsys.opba.protocol.facade.services;
 import com.google.crypto.tink.Aead;
 import de.adorsys.opba.protocol.api.services.SecretKeyService;
 import de.adorsys.opba.protocol.facade.config.EncryptionProperties;
+import de.adorsys.opba.protocol.facade.config.FacadeSecurityProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.security.Provider;
 import java.util.Base64;
 
 import static de.adorsys.opba.protocol.facade.utils.EncryptionUtils.getNewSalt;
@@ -19,7 +19,7 @@ import static de.adorsys.opba.protocol.facade.utils.EncryptionUtils.getNewSalt;
 public class SecretKeyServiceImpl implements SecretKeyService {
 
     private final Aead aeadSystem;
-    private final Provider provider;
+    private final FacadeSecurityProvider provider;
     private final EncryptionProperties properties;
 
     @Override
@@ -40,7 +40,7 @@ public class SecretKeyServiceImpl implements SecretKeyService {
     @SneakyThrows
     public byte[] generateKey(String password, String algo, byte[] salt, int iterCount) {
         PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray(), salt, iterCount);
-        SecretKeyFactory keyFac = SecretKeyFactory.getInstance(algo, provider);
+        SecretKeyFactory keyFac = SecretKeyFactory.getInstance(algo, provider.getProvider());
         return keyFac.generateSecret(pbeKeySpec).getEncoded();
     }
 

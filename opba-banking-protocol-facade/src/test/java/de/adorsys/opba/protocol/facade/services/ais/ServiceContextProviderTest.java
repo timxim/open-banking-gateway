@@ -85,7 +85,10 @@ public class ServiceContextProviderTest {
         ListAccountsRequest request2 = ListAccountsRequest.builder()
                 .facadeServiceable(
                         FacadeServiceableRequest.builder()
+                                .bankId(testBankID)
                                 .serviceSessionId(ss.getId())
+                                .fintechRedirectUrlOk("http://google.com")
+                                .fintechRedirectUrlNok("http://microsoft.com")
                                 .build()
                 ).build();
         ServiceContext<FacadeServiceableGetter> providedContext2 = serviceContextProvider.provide(request2);

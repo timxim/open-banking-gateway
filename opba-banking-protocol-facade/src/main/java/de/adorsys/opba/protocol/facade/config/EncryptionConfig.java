@@ -39,6 +39,7 @@ public class EncryptionConfig {
         if (null == Security.getProperty(properties.getProviderName())) {
             Security.addProvider(new BouncyCastleProvider());
         }
-        return (FacadeSecurityProvider) Security.getProvider(properties.getProviderName());
+
+        return new FacadeSecurityProvider((BouncyCastleProvider) Security.getProvider(properties.getProviderName()));
     }
 }

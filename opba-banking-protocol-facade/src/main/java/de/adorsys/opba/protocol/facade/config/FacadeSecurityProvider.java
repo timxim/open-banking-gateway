@@ -1,9 +1,11 @@
 package de.adorsys.opba.protocol.facade.config;
 
-import java.security.Provider;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class FacadeSecurityProvider extends Provider {
-    public FacadeSecurityProvider(String name, double version, String info) {
-        super(name, version, info);
-    }
+@Getter
+@AllArgsConstructor
+public class FacadeSecurityProvider {
+    private BouncyCastleProvider provider;
 }
