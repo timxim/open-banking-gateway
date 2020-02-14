@@ -11,6 +11,8 @@ import de.adorsys.opba.protocol.api.dto.request.FacadeServiceableGetter;
 import de.adorsys.opba.protocol.api.dto.request.FacadeServiceableRequest;
 import de.adorsys.opba.protocol.api.dto.request.accounts.ListAccountsRequest;
 import de.adorsys.opba.protocol.api.services.EncryptionService;
+import de.adorsys.opba.protocol.api.services.SecretKeyService;
+import de.adorsys.opba.protocol.facade.FacadeEncryptionService;
 import de.adorsys.opba.protocol.facade.services.ServiceContextProvider;
 import de.adorsys.opba.protocol.xs2a.EnableXs2aProtocol;
 import lombok.SneakyThrows;
@@ -21,7 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.crypto.SecretKey;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +43,10 @@ public class ServiceContextProviderTest {
     ServiceSessionRepository serviceSessionRepository;
 
     @Autowired
-    EncryptionService encryptionService;
+    FacadeEncryptionService facadeEncryptionService;
+
+    @Autowired
+    SecretKeyService secretKeyService;
 
     @Test
     @SneakyThrows
@@ -71,9 +75,11 @@ public class ServiceContextProviderTest {
         assertThat(all.iterator().hasNext()).isTrue();
         ServiceSession ss = all.iterator().next();
 
-        SecretKey key = encryptionService.generateKey(password, ss.getAlgo(), ss.getSalt(), ss.getIterCount());
-        assertThat(encryptionService.decryptSecretKey(ss.getSecretKey())).isEqualTo(key.getEncoded());
-        byte[] decryptedData = encryptionService.decrypt(ss.getContext().getBytes(), key.getEncoded());
+        byte[] key = secretKeyService.generateKey(password, ss.getAlgo(), ss.getSalt(), ss.getIterCount());
+        assertThat(secretKeyService.decrypt(ss.getSecretKey())).isEqualTo(key);
+
+        EncryptionService encryptionService = facadeEncryptionService.provideEncryptionService(key);
+        byte[] decryptedData = encryptionService.decrypt(ss.getContext().getBytes());
         assertThat(decryptedData).isEqualTo(MAPPER.writeValueAsBytes(request.getFacadeServiceable()));
 
         ListAccountsRequest request2 = ListAccountsRequest.builder()
@@ -84,7 +90,7 @@ public class ServiceContextProviderTest {
                 ).build();
         ServiceContext<FacadeServiceableGetter> providedContext2 = serviceContextProvider.provide(request2);
 
-        assertThat(providedContext2.getBankId()).isEqualTo(testBankID);
+        assertThat(providedContext2.getRequest().getFacadeServiceable().getBankId()).isEqualTo(testBankID);
     }
 
     @EnableXs2aProtocol

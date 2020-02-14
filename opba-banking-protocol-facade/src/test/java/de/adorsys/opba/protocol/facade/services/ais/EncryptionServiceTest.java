@@ -1,28 +1,36 @@
 package de.adorsys.opba.protocol.facade.services.ais;
 
 import de.adorsys.opba.protocol.api.services.EncryptionService;
+import de.adorsys.opba.protocol.api.services.SecretKeyService;
+import de.adorsys.opba.protocol.facade.FacadeEncryptionService;
 import de.adorsys.opba.protocol.facade.config.EncryptionConfig;
 import de.adorsys.opba.protocol.facade.config.EncryptionProperties;
 import de.adorsys.opba.protocol.facade.services.EncryptionServiceImpl;
-import lombok.RequiredArgsConstructor;
+import de.adorsys.opba.protocol.facade.services.SecretKeyServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.crypto.SecretKey;
-
 import static de.adorsys.opba.protocol.facade.utils.EncryptionUtils.getNewSalt;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = {EncryptionConfig.class, EncryptionServiceImpl.class, EncryptionProperties.class})
+@SpringBootTest(classes = {
+        EncryptionConfig.class,
+        EncryptionServiceImpl.class,
+        EncryptionProperties.class,
+        FacadeEncryptionService.class,
+        SecretKeyServiceImpl.class
+})
 @EnableConfigurationProperties
 public class EncryptionServiceTest {
 
     @Autowired
-    private EncryptionService encryptionService;
+    private FacadeEncryptionService facadeEncryptionService;
+    @Autowired
+    private SecretKeyService secretKeyService;
     @Autowired
     private EncryptionProperties properties;
 
@@ -31,13 +39,13 @@ public class EncryptionServiceTest {
         String password = "QwE!@#";
         byte[] salt = getNewSalt(properties.getSaltLength());
 
-        SecretKey secretKey = encryptionService.generateKey(password, salt);
-        byte[] encryptedSecretKey = encryptionService.encryptSecretKey(secretKey.getEncoded());
+        byte[] secretKey = secretKeyService.generateKey(password, salt);
+        byte[] encryptedSecretKey = secretKeyService.encrypt(secretKey);
 
-        byte[] decryptedSecretKey = encryptionService.decryptSecretKey(encryptedSecretKey);
+        byte[] decryptedSecretKey = secretKeyService.decrypt(encryptedSecretKey);
 
-        SecretKey newlyCreatedFromPassword = encryptionService.generateKey(password, salt);
-        assertThat(decryptedSecretKey).isEqualTo(newlyCreatedFromPassword.getEncoded());
+        byte[] newlyCreatedFromPassword = secretKeyService.generateKey(password, salt);
+        assertThat(decryptedSecretKey).isEqualTo(newlyCreatedFromPassword);
     }
 
     @Test
@@ -45,11 +53,11 @@ public class EncryptionServiceTest {
         String password = "password";
         String data = "data to encrypt";
 
-        SecretKey key = encryptionService.generateKey(password);
+        byte[] key = secretKeyService.generateKey(password);
+        EncryptionService encryptionService = facadeEncryptionService.provideEncryptionService(key);
+        byte[] encryptedData = encryptionService.encrypt(data.getBytes());
 
-        byte[] encryptedData = encryptionService.encrypt(data.getBytes(), key.getEncoded());
-
-        byte[] decryptedData = encryptionService.decrypt(encryptedData, key.getEncoded());
+        byte[] decryptedData = encryptionService.decrypt(encryptedData);
 
         assertThat(decryptedData).isEqualTo(data.getBytes());
     }
