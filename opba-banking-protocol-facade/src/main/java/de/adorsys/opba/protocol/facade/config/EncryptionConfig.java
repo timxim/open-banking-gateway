@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Paths;
-import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 
@@ -36,10 +35,10 @@ public class EncryptionConfig {
     }
 
     @Bean
-    public Provider securityProvider() {
+    public FacadeSecurityProvider securityProvider() {
         if (null == Security.getProperty(properties.getProviderName())) {
             Security.addProvider(new BouncyCastleProvider());
         }
-        return Security.getProvider(properties.getProviderName());
+        return (FacadeSecurityProvider) Security.getProvider(properties.getProviderName());
     }
 }
