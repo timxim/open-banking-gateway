@@ -3,7 +3,7 @@ package de.adorsys.opba.protocol.xs2a.service.xs2a.dto.consent;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.ContextCode;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.FrontendCode;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.ValidationInfo;
-import de.adorsys.opba.protocol.xs2a.service.xs2a.context.Xs2aContext;
+import de.adorsys.opba.protocol.xs2a.service.xs2a.context.ais.Xs2aAisContext;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.dto.DtoMapper;
 import de.adorsys.xs2a.adapter.service.model.AccountAccess;
 import de.adorsys.xs2a.adapter.service.model.Consents;
@@ -23,23 +23,23 @@ import static de.adorsys.opba.protocol.xs2a.constant.GlobalConst.XS2A_MAPPERS_PA
 
 @Getter
 @Setter
-public class ConsentInitiateBody {
+public class AisConsentInitiateBody {
 
     @Valid
-    @ValidationInfo(ui = @FrontendCode("accountaccess.class"), ctx = @ContextCode("consent.access"))
+    @ValidationInfo(ui = @FrontendCode("accountaccess.class"), ctx = @ContextCode("aisConsent.access"))
     @NotNull(message = "{no.ctx.accountaccess}")
     private AccountAccessBody access;
 
-    @ValidationInfo(ui = @FrontendCode("boolean.boolean"), ctx = @ContextCode("consent.recurringIndicator"))
+    @ValidationInfo(ui = @FrontendCode("boolean.boolean"), ctx = @ContextCode("aisConsent.recurringIndicator"))
     @NotNull(message = "{no.ctx.recurringIndicator}")
     private Boolean recurringIndicator;
 
-    @ValidationInfo(ui = @FrontendCode("date.string"), ctx = @ContextCode("consent.validUntil"))
+    @ValidationInfo(ui = @FrontendCode("date.string"), ctx = @ContextCode("aisConsent.validUntil"))
     @NotNull(message = "{no.ctx.validUntil}")
     @FutureOrPresent(message = "{future.ctx.validUntil}")
     private LocalDate validUntil;
 
-    @ValidationInfo(ui = @FrontendCode("textbox.integer"), ctx = @ContextCode("consent.frequencyPerDay"))
+    @ValidationInfo(ui = @FrontendCode("textbox.integer"), ctx = @ContextCode("aisConsent.frequencyPerDay"))
     @NotNull(message = "{no.ctx.frequencyPerDay}")
     private Integer frequencyPerDay;
 
@@ -68,7 +68,7 @@ public class ConsentInitiateBody {
     @Setter
     public static class AccountReferenceBody {
 
-        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "consent"))
+        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "aisConsent"))
         @NotBlank(message = "{no.ctx.iban}")
         private String iban;
 
@@ -78,7 +78,7 @@ public class ConsentInitiateBody {
         private String msisdn;
 
         // TODO check if it is necessary
-        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "consent"))
+        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "aisConsent"))
         @NotBlank(message = "{no.ctx.currency}")
         private String currency;
 
@@ -89,19 +89,19 @@ public class ConsentInitiateBody {
     }
 
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
-    public interface ToXs2aApi extends DtoMapper<ConsentInitiateBody, Consents> {
-        default Consents map(Xs2aContext cons) {
-            return map(cons.getConsent());
+    public interface ToXs2aApi extends DtoMapper<AisConsentInitiateBody, Consents> {
+        default Consents map(Xs2aAisContext cons) {
+            return map(cons.getAisConsent());
         }
 
-        Consents map(ConsentInitiateBody cons);
+        Consents map(AisConsentInitiateBody cons);
     }
 
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
-    public interface FromCtx extends DtoMapper<Xs2aContext, ConsentInitiateBody> {
+    public interface FromCtx extends DtoMapper<Xs2aAisContext, AisConsentInitiateBody> {
 
-        default ConsentInitiateBody map(Xs2aContext cons) {
-            return null == cons.getConsent() ? new ConsentInitiateBody() : cons.getConsent();
+        default AisConsentInitiateBody map(Xs2aAisContext cons) {
+            return null == cons.getAisConsent() ? new AisConsentInitiateBody() : cons.getAisConsent();
         }
     }
 }

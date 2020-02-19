@@ -11,7 +11,7 @@ Choose account access
         <button mat-icon-button type="button" (click)="removeAccount(accountReference)">
           <mat-icon>remove_circle</mat-icon>
         </button>
-        <app-account-reference #accountReference elemId="{{template.elemId}}" prefix="consent.access.accounts[{{i}}]." [form]="form"></app-account-reference>
+        <app-account-reference #accountReference elemId="{{template.elemId}}" prefix="aisConsent.access.accounts[{{i}}]." [form]="form"></app-account-reference>
       </div>
       <button mat-icon-button type="button" (click)="addAccount()" >
         <mat-icon>add_circle</mat-icon>
@@ -24,7 +24,7 @@ Choose account access
         <button mat-icon-button type="button" (click)="removeBalance(balanceReference)">
           <mat-icon>remove_circle</mat-icon>
         </button>
-        <app-account-reference #balanceReference elemId="{{template.elemId}}" prefix="consent.access.balances[{{i}}]." [form]="form"></app-account-reference>
+        <app-account-reference #balanceReference elemId="{{template.elemId}}" prefix="aisConsent.access.balances[{{i}}]." [form]="form"></app-account-reference>
       </div>
       <button mat-icon-button type="button" (click)="addBalance()">
         <mat-icon>add_circle</mat-icon>
@@ -37,7 +37,7 @@ Choose account access
         <button mat-icon-button type="button" (click)="removeTransaction(txReference)">
           <mat-icon>remove_circle</mat-icon>
         </button>
-        <app-account-reference #txReference elemId="{{template.elemId}}" prefix="consent.access.transactions[{{i}}]." [form]="form"></app-account-reference>
+        <app-account-reference #txReference elemId="{{template.elemId}}" prefix="aisConsent.access.transactions[{{i}}]." [form]="form"></app-account-reference>
       </div>
       <button mat-icon-button type="button" (click)="addTransaction()">
         <mat-icon>add_circle</mat-icon>
