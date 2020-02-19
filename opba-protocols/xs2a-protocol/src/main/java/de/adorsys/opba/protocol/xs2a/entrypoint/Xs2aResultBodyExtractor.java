@@ -3,6 +3,7 @@ package de.adorsys.opba.protocol.xs2a.entrypoint;
 import de.adorsys.opba.protocol.api.dto.result.body.AccountListBody;
 import de.adorsys.opba.protocol.api.dto.result.body.TransactionListBody;
 import de.adorsys.opba.protocol.xs2a.domain.dto.messages.InternalProcessResult;
+import de.adorsys.opba.protocol.xs2a.service.XS2aToFacadeMapper;
 import de.adorsys.xs2a.adapter.service.model.AccountDetails;
 import de.adorsys.xs2a.adapter.service.model.AccountListHolder;
 import de.adorsys.xs2a.adapter.service.model.TransactionsReport;
@@ -46,7 +47,8 @@ public class Xs2aResultBodyExtractor {
                         .processInstanceId(result.getProcessId())
                         .singleResult();
         ExecutionEntity exec = (ExecutionEntity) updated;
-        return getResult(exec, AccountListBody.class);
+
+        return new XS2aToFacadeMapper().getFacadeEntity(getResult(exec, AccountListHolder.class));
     }
 
     public TransactionListBody extractTransactionsReport(InternalProcessResult result) {
