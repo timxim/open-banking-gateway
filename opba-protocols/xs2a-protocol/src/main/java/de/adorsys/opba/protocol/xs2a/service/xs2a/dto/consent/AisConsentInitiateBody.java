@@ -76,10 +76,6 @@ public class AisConsentInitiateBody {
         private String pan;
         private String maskedPan;
         private String msisdn;
-
-        // TODO check if it is necessary
-        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "aisConsent"))
-        @NotBlank(message = "{no.ctx.currency}")
         private String currency;
 
         @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
