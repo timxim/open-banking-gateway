@@ -1,7 +1,7 @@
 <h1>TPP asks user to provide data necessary to authorize his request within EMBEDDED authorization</h1>
 <h2>In case of successful authorization user is REDIRECT'ed to ASPSP for further authorization</h2>
 
-<dynamic-form [submissionUri]="submissionUri" [controlTemplates]="inputs"></dynamic-form>
+<app-dynamic-form [submissionUri]="submissionUri" [aisControlTemplates]="inputsAisConsent" [dynamicControlTemplates]="inputsDynamic"></app-dynamic-form>
 
 <br/>
 <a href="assets/docs/rendered/flow.svg">Link to entire end-to-end flow</a>

@@ -1,7 +1,10 @@
 package de.adorsys.opba.protocol.api.dto.request.authorization;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class AisAccountAccess {
 
     private List<String> accounts;

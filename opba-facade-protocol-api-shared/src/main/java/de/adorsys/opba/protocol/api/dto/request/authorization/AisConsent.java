@@ -10,6 +10,7 @@ public class AisConsent {
     private AisAccountAccess access;
     private Integer frequencyPerDay;
     private Boolean recurringIndicator;
-    private String userId;
+    private Boolean combinedServiceIndicator;
+    private String psuId;
     private LocalDate validUntil;
 }

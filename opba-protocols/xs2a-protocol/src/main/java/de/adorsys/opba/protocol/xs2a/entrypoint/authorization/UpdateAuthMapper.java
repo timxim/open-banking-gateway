@@ -1,10 +1,13 @@
 package de.adorsys.opba.protocol.xs2a.entrypoint.authorization;
 
+import de.adorsys.opba.protocol.api.dto.request.authorization.AisConsent;
 import de.adorsys.opba.protocol.api.dto.request.authorization.AuthorizationRequest;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.context.Xs2aContext;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.context.ais.AccountListXs2aContext;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.context.ais.TransactionListXs2aContext;
+import de.adorsys.opba.protocol.xs2a.service.xs2a.dto.DtoMapper;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.dto.DtoUpdatingMapper;
+import de.adorsys.opba.protocol.xs2a.service.xs2a.dto.consent.AisConsentInitiateBody;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,7 +42,7 @@ public class UpdateAuthMapper {
         throw new IllegalArgumentException("Can't update authorization for: " + context.getClass().getCanonicalName());
     }
 
-    @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
+    @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE, uses = AisMapper.class)
     public interface FromAisRequestAccountList extends DtoUpdatingMapper<AuthorizationRequest, AccountListXs2aContext> {
 
         @Mapping(source = "facadeServiceable.uaContext.psuIpAddress", target = "psuIpAddress")
@@ -53,7 +56,7 @@ public class UpdateAuthMapper {
         }
     }
 
-    @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
+    @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE, uses = AisMapper.class)
     public interface FromAisRequestTransactionList extends DtoUpdatingMapper<AuthorizationRequest, TransactionListXs2aContext> {
 
         @Mapping(source = "facadeServiceable.uaContext.psuIpAddress", target = "psuIpAddress")
@@ -65,5 +68,15 @@ public class UpdateAuthMapper {
             mapTo(from, toUpdate);
             return toUpdate;
         }
+    }
+
+    @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
+    public interface AisMapper extends DtoMapper<AisConsent, AisConsentInitiateBody> {
+
+        @Mapping(target = "recurringIndicator")
+        AisConsentInitiateBody map(AisConsent from);
+
+        @Mapping(target = "iban", source = ".")
+        AisConsentInitiateBody.AccountReferenceBody map(String accounts);
     }
 }

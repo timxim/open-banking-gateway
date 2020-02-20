@@ -1,38 +1,42 @@
 import { Component, Input, OnInit }  from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicFormControlBase } from './dynamic-form-control-base';
-import {DynamicFormFactory} from "./dynamic-form-factory";
-import {HttpClient} from "@angular/common/http";
-import {Helpers} from "../app.component";
+import {DynamicFormFactory} from './dynamic-form-factory';
+import {HttpClient} from '@angular/common/http';
+import {Helpers} from '../app.component';
 
 @Component({
-  selector: 'dynamic-form',
+  selector: 'app-dynamic-form',
   templateUrl: './dynamic-form.component.html'
 })
 export class DynamicFormComponent implements OnInit {
 
-  @Input() controlTemplates: DynamicFormControlBase<any>[] = [];
+  @Input() aisControlTemplates: DynamicFormControlBase<any>[] = [];
+  @Input() dynamicControlTemplates: DynamicFormControlBase<any>[] = [];
   @Input() submissionUri: string;
-  form: FormGroup;
+  formConsent: FormGroup;
+  formDynamic: FormGroup;
 
   constructor(private client: HttpClient, private formFactory: DynamicFormFactory) {  }
 
   ngOnInit() {
-    this.form = this.formFactory.toFormGroup(this.controlTemplates);
+    this.formConsent = this.formFactory.toFormGroup(this.aisControlTemplates);
+    this.formDynamic = this.formFactory.toFormGroup(this.dynamicControlTemplates);
   }
 
   save() {
-    const formObj = this.form.getRawValue();
-    console.log(formObj)
-    for (const propName in formObj) {
-      if (formObj[propName] === null || formObj[propName] === undefined || formObj[propName].length === 0) {
-        delete formObj[propName];
-      }
-    }
+    const dynamicForm = this.formDynamic.getRawValue();
+    this.cleanup(dynamicForm);
+
+    const consentForm = this.formConsent.getRawValue();
+    this.cleanup(consentForm);
 
     this.client.post(
       this.submissionUri,
-      {scaAuthenticationData: formObj}, // scaAuthenticationData is not really correct
+      {
+        consentAuth: {consent: consentForm},
+        scaAuthenticationData: dynamicForm
+      }, // scaAuthenticationData is not really correct
       {headers: {
         'X-Request-ID': Helpers.uuidv4(),
         'X-XSRF-TOKEN': Helpers.uuidv4(),
@@ -45,5 +49,13 @@ export class DynamicFormComponent implements OnInit {
         window.location.href = error.url;
       }
     });
+  }
+
+  private cleanup(form) {
+    for (const propName in form) {
+      if (form[propName] === null || form[propName] === undefined || form[propName].length === 0) {
+        delete form[propName];
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DynamicFormControlBase} from "../dynamic-form/dynamic-form-control-base";
-import {ActivatedRoute, Router} from "@angular/router";
+import {DynamicFormControlBase, Target} from "../dynamic-form/dynamic-form-control-base";
+import {ActivatedRoute} from "@angular/router";
 import {Consts} from "../consts";
 
 @Component({
@@ -10,7 +10,8 @@ import {Consts} from "../consts";
 })
 export class ParametersInputComponent implements OnInit {
 
-  @Input() inputs: DynamicFormControlBase<any>[] = [];
+  @Input() inputsAisConsent: DynamicFormControlBase<any>[] = [];
+  @Input() inputsDynamic: DynamicFormControlBase<any>[] = [];
   submissionUri: string = Consts.API_V1_URL_BASE + 'consent/';
 
   constructor(private activatedRoute: ActivatedRoute) {  }
@@ -19,7 +20,10 @@ export class ParametersInputComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(
       params => {
         this.submissionUri = this.submissionUri + params['authorizationSessionId'] + '/embedded?redirectCode=' + params['redirectCode'];
-        this.inputs = JSON.parse(params['q']).map(it => new DynamicFormControlBase(it.ctxCode, it.uiCode, it.message));
+        const data: DynamicFormControlBase<any>[] = JSON.parse(params['q'])
+          .map(it => new DynamicFormControlBase(it.ctxCode, it.uiCode, it.message, it.target as Target));
+        this.inputsAisConsent = data.filter(it => it.target === Target.AIS_CONSENT);
+        this.inputsDynamic = data.filter(it => it.target === Target.CONTEXT);
       }
     );
   }

@@ -20,26 +20,27 @@ import java.util.List;
 
 import static de.adorsys.opba.protocol.xs2a.constant.GlobalConst.SPRING_KEYWORD;
 import static de.adorsys.opba.protocol.xs2a.constant.GlobalConst.XS2A_MAPPERS_PACKAGE;
+import static de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.TargetObject.AIS_CONSENT;
 
 @Getter
 @Setter
 public class AisConsentInitiateBody {
 
     @Valid
-    @ValidationInfo(ui = @FrontendCode("accountaccess.class"), ctx = @ContextCode("aisConsent.access"))
+    @ValidationInfo(ui = @FrontendCode("accountaccess.class"), ctx = @ContextCode(value = "access", target = AIS_CONSENT))
     @NotNull(message = "{no.ctx.accountaccess}")
     private AccountAccessBody access;
 
-    @ValidationInfo(ui = @FrontendCode("boolean.boolean"), ctx = @ContextCode("aisConsent.recurringIndicator"))
+    @ValidationInfo(ui = @FrontendCode("boolean.boolean"), ctx = @ContextCode(value = "recurringIndicator", target = AIS_CONSENT))
     @NotNull(message = "{no.ctx.recurringIndicator}")
     private Boolean recurringIndicator;
 
-    @ValidationInfo(ui = @FrontendCode("date.string"), ctx = @ContextCode("aisConsent.validUntil"))
+    @ValidationInfo(ui = @FrontendCode("date.string"), ctx = @ContextCode(value = "validUntil", target = AIS_CONSENT))
     @NotNull(message = "{no.ctx.validUntil}")
     @FutureOrPresent(message = "{future.ctx.validUntil}")
     private LocalDate validUntil;
 
-    @ValidationInfo(ui = @FrontendCode("textbox.integer"), ctx = @ContextCode("aisConsent.frequencyPerDay"))
+    @ValidationInfo(ui = @FrontendCode("textbox.integer"), ctx = @ContextCode(value = "frequencyPerDay", target = AIS_CONSENT))
     @NotNull(message = "{no.ctx.frequencyPerDay}")
     private Integer frequencyPerDay;
 
@@ -48,6 +49,7 @@ public class AisConsentInitiateBody {
 
     @Getter
     @Setter
+    // FIXME: should use conditional validator - access accounts/balances/transactions OR availableAccounts/allPsd2
     public static class AccountAccessBody {
 
         // These fields are conditionally-validated
@@ -68,7 +70,7 @@ public class AisConsentInitiateBody {
     @Setter
     public static class AccountReferenceBody {
 
-        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "aisConsent"))
+        @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode(prefix = "ais", target = AIS_CONSENT))
         @NotBlank(message = "{no.ctx.iban}")
         private String iban;
 
