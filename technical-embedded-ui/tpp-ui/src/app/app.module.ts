@@ -28,6 +28,7 @@ import { InitialRequestComponent } from './initial-request/initial-request.compo
 import { FromAspspComponent } from './from-aspsp/from-aspsp.component';
 import { EmbeddedStartComponent } from './embedded-start/embedded-start.component';
 import { FintechCallbackOkComponent } from './fintech-callback-ok/fintech-callback-ok.component';
+import {Globals} from "./globals";
 
 export const AppDateFormats = {
   parse: {
@@ -74,6 +75,7 @@ export const AppDateFormats = {
         FormsModule
     ],
   providers: [
+    Globals,
     DynamicFormFactory,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: AppDateFormats},

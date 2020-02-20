@@ -14,6 +14,7 @@ export class AccountReferenceComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() elemId: number;
   @Input() prefix = '';
+  @Input() ibanValue: string;
 
   ibanName: string;
   currencyName: string;
@@ -37,5 +38,6 @@ export class AccountReferenceComponent implements OnInit {
 
     this.form.addControl(this.ibanName, this.iban);
     this.form.addControl(this.currencyName, this.currency);
+    this.iban.setValue(this.ibanValue);
   }
 }

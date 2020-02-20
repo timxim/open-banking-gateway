@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DynamicFormControlBase, Target} from "../dynamic-form/dynamic-form-control-base";
 import {ActivatedRoute} from "@angular/router";
 import {Consts} from "../consts";
+import {Globals, UserInfo} from "../globals";
 
 @Component({
   selector: 'app-parameters-input',
@@ -10,11 +11,14 @@ import {Consts} from "../consts";
 })
 export class ParametersInputComponent implements OnInit {
 
+  Users = Users;
+  AccountRefType = AccountRefType;
+
   @Input() inputsAisConsent: DynamicFormControlBase<any>[] = [];
   @Input() inputsDynamic: DynamicFormControlBase<any>[] = [];
   submissionUri: string = Consts.API_V1_URL_BASE + 'consent/';
 
-  constructor(private activatedRoute: ActivatedRoute) {  }
+  constructor(private activatedRoute: ActivatedRoute, private globals: Globals) {  }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(
@@ -27,4 +31,33 @@ export class ParametersInputComponent implements OnInit {
       }
     );
   }
+
+  setDataFor(user: Users, acc: AccountRefType) {
+    this.globals.userInfoPublished.next(new UserInfo('psuIpAddress', '1.1.1.1'));
+    this.globals.userInfoPublished.next(new UserInfo('psuId', user.toString()));
+    if (acc !== AccountRefType.ALL) {
+      this.globals.userInfoPublished.next(
+        new UserInfo(acc.toString(), user === Users.ANTON ? 'DE80760700240271232400' : 'DE38760700240320465700')
+      );
+    } else {
+      this.globals.userInfoPublished.next(
+        new UserInfo(acc.toString(), 'allAccounts')
+      );
+    }
+    this.globals.userInfoPublished.next(new UserInfo('recurringIndicator', true));
+    this.globals.userInfoPublished.next(new UserInfo('frequencyPerDay', 12));
+    this.globals.userInfoPublished.next(new UserInfo('validUntil', '2030-01-01'));
+  }
+}
+
+export enum AccountRefType {
+  ALL = 'ais.allAccounts',
+  ACCOUNT = 'ais.accounts',
+  BALANCES = 'ais.balances',
+  TRANSACTIONS = 'ais.transactions'
+}
+
+export enum Users {
+  ANTON = 'anton.brueckner',
+  MAX = 'max.musterman',
 }

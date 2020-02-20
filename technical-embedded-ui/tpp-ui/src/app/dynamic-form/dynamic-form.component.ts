@@ -1,4 +1,4 @@
-import { Component, Input, OnInit }  from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicFormControlBase } from './dynamic-form-control-base';
 import {DynamicFormFactory} from './dynamic-form-factory';

@@ -12,7 +12,7 @@
       </select>
     </div>
 
-    <three-state-checkbox *ngSwitchCase="'boolean'" [form]="form" controlName="{{control.id}}" label="{{control.message}}"></three-state-checkbox>
+    <app-three-state-checkbox *ngSwitchCase="'boolean'" [form]="form" controlName="{{control.id}}" label="{{control.message}}"></app-three-state-checkbox>
 
     <mat-form-field *ngSwitchCase="'date'">
       <input matInput [matDatepicker]="dp" name="{{control.id}}" placeholder="{{control.message}}" [formControlName]="control.id">
