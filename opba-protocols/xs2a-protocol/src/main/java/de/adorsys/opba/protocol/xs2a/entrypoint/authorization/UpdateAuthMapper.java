@@ -42,7 +42,6 @@ public class UpdateAuthMapper {
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
     public interface FromAisRequestAccountList extends DtoUpdatingMapper<AuthorizationRequest, AccountListXs2aContext> {
 
-        @Mapping(source = "facadeServiceable.bankId", target = "aspspId")
         @Mapping(source = "facadeServiceable.uaContext.psuIpAddress", target = "psuIpAddress")
         @Mapping(source = "facadeServiceable.uaContext.psuAccept", target = "contentType", nullValuePropertyMappingStrategy = IGNORE)
         void mapTo(AuthorizationRequest request, @MappingTarget AccountListXs2aContext context);
@@ -57,7 +56,6 @@ public class UpdateAuthMapper {
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
     public interface FromAisRequestTransactionList extends DtoUpdatingMapper<AuthorizationRequest, TransactionListXs2aContext> {
 
-        @Mapping(source = "facadeServiceable.bankId", target = "aspspId")
         @Mapping(source = "facadeServiceable.uaContext.psuIpAddress", target = "psuIpAddress")
         @Mapping(source = "facadeServiceable.uaContext.psuAccept", target = "contentType", nullValuePropertyMappingStrategy = IGNORE)
         void mapTo(AuthorizationRequest request, @MappingTarget TransactionListXs2aContext context);

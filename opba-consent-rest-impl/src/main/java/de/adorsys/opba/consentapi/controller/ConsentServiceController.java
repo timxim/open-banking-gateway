@@ -37,6 +37,7 @@ public class ConsentServiceController implements ConsentAuthorizationApi {
                                 .requestId(xRequestID)
                                 .build()
                         )
+                        .aisConsent()
                         .scaAuthenticationData(body.getScaAuthenticationData())
                         .build()
         ).thenApply(mapper::translate);
