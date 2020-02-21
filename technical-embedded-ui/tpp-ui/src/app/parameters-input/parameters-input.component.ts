@@ -41,12 +41,12 @@ export class ParametersInputComponent implements OnInit {
       );
     } else {
       this.globals.userInfoPublished.next(
-        new UserInfo(acc.toString(), 'allAccounts')
+        new UserInfo(acc.toString(), 'ALL_ACCOUNTS')
       );
     }
-    this.globals.userInfoPublished.next(new UserInfo('recurringIndicator', true));
-    this.globals.userInfoPublished.next(new UserInfo('frequencyPerDay', 12));
-    this.globals.userInfoPublished.next(new UserInfo('validUntil', '2030-01-01'));
+    this.globals.userInfoPublished.next(new UserInfo('ais.recurringIndicator', true));
+    this.globals.userInfoPublished.next(new UserInfo('ais.frequencyPerDay', 12));
+    this.globals.userInfoPublished.next(new UserInfo('ais.validUntil', '2030-01-01'));
   }
 }
 

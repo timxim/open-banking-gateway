@@ -27,7 +27,7 @@ export class AccountSelectorComponent implements OnInit {
     this.globals.userInfo.subscribe(it => {
       if (it.id === 'ais.allAccounts') {
         this.allChecked.checked = true;
-        this.allAccounts.setValue(it.value);
+        this.aisConsent.access.availableAccounts = it.value;
       }
 
       if (it.id === 'ais.accounts') {
