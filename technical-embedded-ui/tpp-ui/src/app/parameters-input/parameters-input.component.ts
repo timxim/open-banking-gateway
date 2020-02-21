@@ -33,8 +33,8 @@ export class ParametersInputComponent implements OnInit {
   }
 
   setDataFor(user: Users, acc: AccountRefType) {
-    this.globals.userInfoPublished.next(new UserInfo('psuIpAddress', '1.1.1.1'));
-    this.globals.userInfoPublished.next(new UserInfo('psuId', user.toString()));
+    this.globals.userInfoPublished.next(new UserInfo('PSU_IP_ADDRESS', '1.1.1.1'));
+    this.globals.userInfoPublished.next(new UserInfo('PSU_ID', user.toString()));
     if (acc !== AccountRefType.ALL) {
       this.globals.userInfoPublished.next(
         new UserInfo(acc.toString(), user === Users.ANTON ? 'DE80760700240271232400' : 'DE38760700240320465700')

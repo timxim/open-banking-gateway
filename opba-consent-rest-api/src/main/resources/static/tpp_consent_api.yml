@@ -850,6 +850,11 @@ components:
             type: string
           description: SCA authentication data, depending on the chosen authentication
             method. If the data is binary, then it is base64 encoded.
+        extras:
+          type: object
+          additionalProperties:
+            type: string
+          description: ASPSP customary authorization parameters required to i.e. initiate consent.
 
     BulkPayment:
       title: BulkPayment

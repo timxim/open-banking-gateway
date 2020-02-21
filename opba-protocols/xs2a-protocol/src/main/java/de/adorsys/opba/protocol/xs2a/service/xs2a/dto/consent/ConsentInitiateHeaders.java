@@ -24,7 +24,7 @@ import static de.adorsys.xs2a.adapter.service.RequestHeaders.TPP_REDIRECT_URI;
 @Setter
 public class ConsentInitiateHeaders extends WithBasicInfo {
 
-    @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode("psuIpAddress"))
+    @ValidationInfo(ui = @FrontendCode("textbox.string"), ctx = @ContextCode("PSU_IP_ADDRESS"))
     @NotBlank(message = "{no.ctx.psuIpAddress}")
     private String psuIpAddress;
 

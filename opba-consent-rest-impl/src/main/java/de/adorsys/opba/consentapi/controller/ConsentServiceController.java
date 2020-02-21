@@ -3,6 +3,7 @@ package de.adorsys.opba.consentapi.controller;
 import de.adorsys.opba.consentapi.model.generated.PsuAuthRequest;
 import de.adorsys.opba.consentapi.resource.generated.ConsentAuthorizationApi;
 import de.adorsys.opba.consentapi.service.mapper.AisConsentMapper;
+import de.adorsys.opba.consentapi.service.mapper.AisExtrasMapper;
 import de.adorsys.opba.protocol.api.dto.request.FacadeServiceableRequest;
 import de.adorsys.opba.protocol.api.dto.request.authorization.AuthorizationRequest;
 import de.adorsys.opba.protocol.api.dto.request.authorization.fromaspsp.FromAspspRequest;
@@ -19,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class ConsentServiceController implements ConsentAuthorizationApi {
 
+    private final AisExtrasMapper extrasMapper;
     private final AisConsentMapper aisConsentMapper;
     private final FacadeResponseMapper mapper;
     private final UpdateAuthorizationService updateAuthorizationService;
@@ -41,7 +43,7 @@ public class ConsentServiceController implements ConsentAuthorizationApi {
                         )
                         .aisConsent(aisConsentMapper.map(body))
                         .scaAuthenticationData(body.getScaAuthenticationData())
-                        // FIXME: extras
+                        .extras(extrasMapper.map(body.getExtras()))
                         .build()
         ).thenApply(mapper::translate);
     }
