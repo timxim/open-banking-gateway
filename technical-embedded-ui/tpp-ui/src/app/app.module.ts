@@ -29,6 +29,7 @@ import { FromAspspComponent } from './from-aspsp/from-aspsp.component';
 import { EmbeddedStartComponent } from './embedded-start/embedded-start.component';
 import { FintechCallbackOkComponent } from './fintech-callback-ok/fintech-callback-ok.component';
 import {Globals} from "./globals";
+import { AppAisConsentComponent } from './app-ais-consent/app-ais-consent.component';
 
 export const AppDateFormats = {
   parse: {
@@ -57,7 +58,8 @@ export const AppDateFormats = {
     InitialRequestComponent,
     FromAspspComponent,
     EmbeddedStartComponent,
-    FintechCallbackOkComponent
+    FintechCallbackOkComponent,
+    AppAisConsentComponent
   ],
     imports: [
         BrowserModule,

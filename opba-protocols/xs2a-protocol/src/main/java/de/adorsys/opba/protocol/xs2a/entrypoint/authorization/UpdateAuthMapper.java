@@ -73,7 +73,6 @@ public class UpdateAuthMapper {
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = XS2A_MAPPERS_PACKAGE)
     public interface AisMapper extends DtoMapper<AisConsent, AisConsentInitiateBody> {
 
-        @Mapping(target = "recurringIndicator")
         AisConsentInitiateBody map(AisConsent from);
 
         @Mapping(target = "iban", source = ".")

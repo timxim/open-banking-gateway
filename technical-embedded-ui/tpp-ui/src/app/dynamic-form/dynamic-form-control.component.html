@@ -19,12 +19,6 @@
       <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
       <mat-datepicker #dp></mat-datepicker>
     </mat-form-field>
-
-    <div *ngSwitchCase="'accountaccess'">
-      <br><br>
-      <app-account-selector [form]="form"></app-account-selector>
-    </div>
-
   </div>
 
   <div class="errorMessage" *ngIf="!isValid">{{control.id}} is required</div>

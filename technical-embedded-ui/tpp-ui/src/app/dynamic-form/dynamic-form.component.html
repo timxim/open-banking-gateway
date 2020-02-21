@@ -2,11 +2,9 @@
 <div>
   <form ngNoForm method="post" action="{{submissionUri}}">
 
-    <ng-container *ngIf="aisControlTemplates.length !== 0">
+    <ng-container *ngIf="aisConsent">
       <h4>AIS consent</h4>
-      <div *ngFor="let template of aisControlTemplates" class="form-row">
-        <app-dynamic-form-control [control]="template" [form]="formConsent"></app-dynamic-form-control>
-      </div>
+      <app-app-ais-consent [aisConsent]="aisConsent" [form]="formStatic"></app-app-ais-consent>
     </ng-container>
 
     <hr>

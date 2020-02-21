@@ -41,6 +41,7 @@ public class ConsentServiceController implements ConsentAuthorizationApi {
                         )
                         .aisConsent(aisConsentMapper.map(body))
                         .scaAuthenticationData(body.getScaAuthenticationData())
+                        // FIXME: extras
                         .build()
         ).thenApply(mapper::translate);
     }
